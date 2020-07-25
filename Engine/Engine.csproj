@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="Errors.cs" />
     <Compile Include="Item.cs" />

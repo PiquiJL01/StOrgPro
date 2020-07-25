@@ -12,11 +12,12 @@ namespace Engine
     public class DataManager
     {
         private SqlConnection connection = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;" +
-            "AttachDbFilename=C:\\Users\\inmun\\source\\repos\\Test2\\Engine\\DataBase.mdf;" +
+            "AttachDbFilename=C:\\Users\\inmun\\source\\repos\\Test2\\StOrgPro\\Engine\\DataBase.mdf;" +
             "Integrated Security=True");
 
         public User Login(string name, string password)
         {
+            string Domain = System.Reflection.Assembly.GetEntryAssembly().Location;
             connection.Open();
             User user;
             if (name == "admin")
