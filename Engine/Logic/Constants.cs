@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StOrgPro
+namespace Engine
 {
     public class Constants
     {
@@ -16,6 +16,10 @@ namespace StOrgPro
         public const string Almacen = "Almacen";
         public const string Item = "Ítem";
         public const string Inventario = "Inventario";
+
+
+        public const string Password = "Password";
+        public const string RepeatPAssword = "Repita el Password";
 
         public const string Nombre = "Nombre";
         public const string Largo = "Largo";
@@ -30,7 +34,9 @@ namespace StOrgPro
     {
         Create,
         Modify,
-        Delete
+        Delete,
+        See,
+        Search
     }
 
     public enum DataType

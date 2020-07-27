@@ -22,11 +22,31 @@ namespace StOrgPro
             }
             else if (error is FailedToRemove)
             {
-                MessageBox.Show("Movimiento Invalido");
+                MessageBox.Show("Movimiento Fallido");
             }
             else if (error is WrongUserType)
             {
                 MessageBox.Show("Usuario Invalido");
+            }
+            else if (error is AlreadyExists)
+            {
+                MessageBox.Show("Ya existe");
+            }
+            else if (error is DoesNotExist)
+            {
+                MessageBox.Show("No existe");
+            }
+            else if (error is InventoryCreation)
+            {
+                MessageBox.Show("Error al crear inventario");
+            }
+            else if (error is WrongDataType)
+            {
+                MessageBox.Show("Tipo de data invalido");
+            }
+            else if (error is NoPermit)
+            {
+                MessageBox.Show("No tiene permiso para realizar este movimiento");
             }
             else
             {

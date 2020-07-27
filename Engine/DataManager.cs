@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Collections;
+using System.ComponentModel;
+using Engine.Logic;
 
 namespace Engine
 {
@@ -17,40 +20,42 @@ namespace Engine
 
         public User Login(string name, string password)
         {
-            string Domain = System.Reflection.Assembly.GetEntryAssembly().Location;
-            connection.Open();
-            User user;
-            if (name == "admin")
+            User user = GetUser(name);
+            if (user.Password == password)
             {
-                user = new User(name, "admin", true, true, true, true, true);
-                user.ValidatePassword(password);
-            }
-            else if (name == "super")
-            {
-                user = new User(name, "super", false, true, false, true, true);
-                user.ValidatePassword("super");
-            }
-            else if (name == "manager")
-            {
-                user = new User(name, "manager", false, false, true, true, false);
-                user.ValidatePassword("manager");
-                user.PermitUserManagement = false;
-                user.PermitStoragesManagement = true;
-                user.PermitItemManagement = false;
-                user.PermitInventoryManagement = true;
-                user.PermitHistoryViewer = false;
+                return user;
             }
             else
             {
                 throw new FailedLogin();
             }
-
-            connection.Close();
-
-            return user;
         }
 
         #region Insertar
+        public void Insert(User user)
+        {
+            try
+            {
+                string query = "Insert INTO Users (Nombre, Password, PermisoUsuario, Permisoitems, PermisoInventario, PermisoAlmacen)" +
+                    "Values (@nombre, @password, @permisoUsuario, @permisoItems, @permisoInventario, @permisoAlmacen)";
+                connection.Open();
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@nombre", user.UserName);
+                command.Parameters.AddWithValue("@password", user.Password);
+                command.Parameters.AddWithValue("@permisoUsuario", user.IntPermitUserMang());
+                command.Parameters.AddWithValue("@permisoitems", user.IntPermitCatalogMang());
+                command.Parameters.AddWithValue("@permisoInventario", user.IntPermitInventoryMng());
+                command.Parameters.AddWithValue("@permisoAlmacen", user.IntPermitStorageMng());
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception)
+            {
+                connection.Close();
+                throw new AlreadyExists();
+            }
+        }
+
         public void Insert(Storage storage)
         {
             try
@@ -68,6 +73,7 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new AlreadyExists();
             }
         }
@@ -90,6 +96,7 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new InventoryCreation();
             }
         }
@@ -111,6 +118,7 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new AlreadyExists();
             }
         }
@@ -133,18 +141,46 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new AlreadyExists();
             }
         }
         #endregion
 
         #region Update
+        public void Update(User user)
+        {
+            try
+            {
+                string query = "UPDATE Users " +
+                    "SET Password = @password, PermisoUsuario = @permisoUsuario " +
+                    "Permisoitems = @permisoItems, PermisoInventario = @permisoInventario, " +
+                    "PermisoAlmacen = @permisoAlmacen " +
+                    "WHERE Nombre = @nombre";
+                connection.Open();
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@nombre", user.UserName);
+                command.Parameters.AddWithValue("@password", user.Password);
+                command.Parameters.AddWithValue("@permisoUsuario", user.IntPermitUserMang());
+                command.Parameters.AddWithValue("@permisoItems", user.IntPermitCatalogMang());
+                command.Parameters.AddWithValue("@permisoInventario", user.IntPermitInventoryMng());
+                command.Parameters.AddWithValue("@permisoAlmacen", user.IntPermitStorageMng());
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception)
+            {
+                connection.Close();
+                throw new DoesNotExist();
+            }
+        }
+
         public void Update(Storage storage)
         {
             try
             {
                 string query = "UPDATE Almacenes " +
-                    "SET largo = @largo, ancho = @ancho " +
+                    "SET Largo = @largo, Ancho = @ancho " +
                     "WHERE Nombre = @nombre";
                 connection.Open();
                 SqlCommand command = new SqlCommand(query, connection);
@@ -156,6 +192,7 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new DoesNotExist();
             }
         }
@@ -178,6 +215,7 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new DoesNotExist();
             }
         }
@@ -198,12 +236,32 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new DoesNotExist();
             }
         }
         #endregion
 
         #region Delete
+        public void Delete(User user)
+        {
+            try
+            {
+                string query = "DELETE FROM Users " +
+                "WHERE Nombre = @nombre";
+                connection.Open();
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@nombre", user.UserName);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception)
+            {
+                connection.Close();
+                throw new DoesNotExist();
+            }
+        }
+
         public void Delete(Storage storage)
         {
             try
@@ -219,6 +277,7 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new DoesNotExist();
             }
         }
@@ -235,6 +294,7 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new InventoryCreation();
             }
         }
@@ -253,6 +313,7 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new DoesNotExist();
             }
         }
@@ -271,29 +332,33 @@ namespace Engine
             }
             catch (Exception)
             {
+                connection.Close();
                 throw new DoesNotExist();
             }
         }
         #endregion
 
         #region Getters Objects
-
         public User GetUser(string name)
         {
-            string query = "SELECT * from Usuarios WHERE Nombre = @nombre";
+            string query = "SELECT * from Users WHERE Nombre = @nombre";
             connection.Open();
             SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@nombre", name);
             SqlDataReader dataReader = command.ExecuteReader();
             if (dataReader.Read())
             {
+                User user = new User(dataReader["Nombre"].ToString(), dataReader["Password"].ToString(),
+                    Convert.ToInt32(dataReader["PermisoUsuario"].ToString()),
+                    Convert.ToInt32(dataReader["Permisoitems"].ToString()),
+                    Convert.ToInt32(dataReader["PermisoInventario"].ToString()),
+                    Convert.ToInt32(dataReader["PermisoAlmacen"].ToString()));
                 connection.Close();
-                return new User(dataReader["Nombre"].ToString(), dataReader["Password"].ToString(),
-                    true, true, true, true, true);
+                return user;
             }
 
             connection.Close();
-            return null;
+            throw new Exception();
         }
 
         public Storage GetStorage(string name)
@@ -360,7 +425,7 @@ namespace Engine
         #region Getters Objects Collections
         public DataTable GetUsers()
         {
-            string query = "Select * from Usuarios";
+            string query = "Select * from Users";
             connection.Open();
             SqlCommand command = new SqlCommand(query, connection);
             SqlDataAdapter adapter = new SqlDataAdapter();
@@ -408,9 +473,41 @@ namespace Engine
             connection.Close();
             return table;
         }
+
+        public DataTable GetSearchResults(Item item)
+        {
+            List<string> storagesNames = GetStorageName();
+            List<Storage> storages = new List<Storage>();
+            IList<SearchResult> results = new List<SearchResult>();
+            foreach (string name in storagesNames)
+            {
+                storages.Add(GetStorage(name));
+            }
+            foreach (Storage storage in storages)
+            {
+                results.Add(new SearchResult(storage.Name, GetItemQuantity(storage, item)));
+            }
+
+            return ToDataTable(results);
+        }
         #endregion
 
         #region Getters Objects IDs
+        public List<string> GetUserNames()
+        {
+            List<string> Names = new List<string>();
+            string query = "SELECT Nombre FROM Users";
+            connection.Open();
+            SqlCommand command = new SqlCommand(query, connection);
+            SqlDataReader sqlData = command.ExecuteReader();
+            while (sqlData.Read())
+            {
+                Names.Add(sqlData["Nombre"].ToString());
+            }
+            connection.Close();
+            return Names;
+        }
+
         public List<string> GetItemCodes(Storage storage = null)
         {
             List<string> Codes = new List<string>();
@@ -448,21 +545,25 @@ namespace Engine
             connection.Close();
             return Names;
         }
-
-        public List<string> GetUsersName()
-        {
-            List<string> Names = new List<string>();
-            string query = "SELECT Nombre FROM Usuarios";
-            connection.Open();
-            SqlCommand command = new SqlCommand(query, connection);
-            SqlDataReader sqlData = command.ExecuteReader();
-            while (sqlData.Read())
-            {
-                Names.Add(sqlData["Codigo"].ToString());
-            }
-            connection.Close();
-            return Names;
-        }
         #endregion
+
+        private static DataTable ToDataTable(IList<SearchResult> list)
+        {
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(SearchResult));
+            DataTable table = new DataTable();
+            for (int i = 0; i < props.Count; i++)
+            {
+                PropertyDescriptor prop = props[i];
+                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+            }
+            object[] values = new object[props.Count];
+            foreach (SearchResult item in list)
+            {
+                for (int i = 0; i < values.Length; i++)
+                    values[i] = props[i].GetValue(item) ?? DBNull.Value;
+                table.Rows.Add(values);
+            }
+            return table;
+        }
     }
 }

@@ -21,15 +21,15 @@ namespace StOrgPro
             InitializeComponent();
             if (!user.PermitUserManagement)
             {
-                BtnUser.Text = "Gestion de Usuario";
+                BtnUser.Text = "Cambiar Password";
             }
             if (!user.PermitStoragesManagement)
             {
-                BtnStorage.Text = "Gestion de Inventario";
+                BtnStorage.Text = "Ver Almacenes";
             }
-            if (!user.PermitItemManagement)
+            if (!user.PermitCatalogManagement)
             {
-                BtnItem.Text = "Consultar Catalogo";
+                BtnItem.Text = "Ver Catalogo";
             }
 
             Update();
@@ -39,14 +39,14 @@ namespace StOrgPro
         private void BtnUser_Click(object sender, EventArgs e)
         {
             Hide();
-            if (user.PermitUserManagement)
+            if (user.GetPermit(DataType.User))
             {
-                CommonMenus.Manage manage = new CommonMenus.Manage(DataType.User);
+                CommonMenus.Manage manage = new CommonMenus.Manage(user, DataType.User);
                 manage.ShowDialog();
             }
             else
             {
-               CommonMenus.ModifyDeleteFormulary modifyDelete = new CommonMenus.ModifyDeleteFormulary(user);
+               CommonMenus.ModifyDeleteFormulary modifyDelete = new CommonMenus.ModifyDeleteFormulary(user, DataType.User);
                 modifyDelete.ShowDialog();
             }
             Show();
@@ -55,14 +55,14 @@ namespace StOrgPro
         private void BtnStorage_Click(object sender, EventArgs e)
         {
             Hide();
-            if (user.PermitStoragesManagement)
+            if (user.GetPermit(DataType.Storage))
             {
-                CommonMenus.Manage manage = new CommonMenus.Manage(DataType.Storage);
+                CommonMenus.Manage manage = new CommonMenus.Manage(user, DataType.Storage);
                 manage.ShowDialog();
             }
             else
             {
-                CommonMenus.ModifyDeleteFormulary modifyDeleteFormulary = new CommonMenus.ModifyDeleteFormulary(Process.Modify, DataType.Inventory);
+                CommonMenus.ModifyDeleteFormulary modifyDeleteFormulary = new CommonMenus.ModifyDeleteFormulary(Process.See, DataType.Storage);
                 modifyDeleteFormulary.ShowDialog();
             }
             Show();
@@ -70,10 +70,10 @@ namespace StOrgPro
 
         private void BtnItem_Click(object sender, EventArgs e)
         {
-            if (user.PermitItemManagement)
+            if (user.PermitCatalogManagement)
             {
                 Hide();
-                CommonMenus.Manage manage = new CommonMenus.Manage(DataType.Item);
+                CommonMenus.Manage manage = new CommonMenus.Manage(user, DataType.Item);
                 manage.ShowDialog();
                 Show();
             }

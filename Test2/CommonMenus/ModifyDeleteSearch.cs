@@ -16,32 +16,26 @@ namespace StOrgPro.CommonMenus
         #region Local Variables
         DataManager dataManager = new DataManager();
         readonly Storage storage;
-        private readonly Process process;
-        private readonly DataType dataType;
-        private readonly User user;
+        private Process process;
+        private DataType dataType;
+        private User user;
         #endregion
 
         #region Create Formulary
-        public ModifyDeleteFormulary(Process process, DataType dataType)
+        public ModifyDeleteFormulary(User user, Process process, DataType dataType)
         {
             this.dataType = dataType;
             this.process = process;
             WindowsSetup();
         }
 
-        public ModifyDeleteFormulary(Storage storage)
+        public ModifyDeleteFormulary(User user, Storage storage)
         {
+            this.user = user;
             this.storage = storage;
             process = Process.Modify;
             dataType = DataType.Inventory;
             WindowsSetup();
-        }
-
-        public ModifyDeleteFormulary(User user)
-        {
-            this.user = user;
-            process = Process.Modify;
-            dataType = DataType.User;
         }
         #endregion
         private void WindowsSetup()
@@ -224,7 +218,7 @@ namespace StOrgPro.CommonMenus
             switch (dataType)
             {
                 case DataType.User:
-                    List<string> usersNames = dataManager.GetUsersName();
+                    List<string> usersNames = dataManager.GetUserNames();
                     foreach (string name in usersNames)
                     {
                         CBoxSelect.Items.Add(name);
@@ -312,7 +306,7 @@ namespace StOrgPro.CommonMenus
                 {
                     Storage dataStorage = GetFromComboBox();
                     Hide();
-                    ModifyDeleteFormulary modifyInventory = new ModifyDeleteFormulary(dataStorage);
+                    ModifyDeleteFormulary modifyInventory = new ModifyDeleteFormulary(user, dataStorage);
                     modifyInventory.ShowDialog();
                     Show();
                 }
@@ -386,6 +380,7 @@ namespace StOrgPro.CommonMenus
                 MessageBox.Show("Transaccion fallida");
                 Show();
             }
+            CBoxSelect.ResetText();
             UpdateForm();
         }
 

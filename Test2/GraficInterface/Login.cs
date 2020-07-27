@@ -32,10 +32,7 @@ namespace StOrgPro
             {
                 user = null;
                 this.Hide();
-                Message message = new Message();
-                message.ShowError(error);
-                TxtUser.Text = "";
-                TxtPassword.Text = "";
+                new Message().ShowError(error);
                 this.Show();
                 return;
             }
@@ -43,7 +40,7 @@ namespace StOrgPro
             Hide();
             MainMenu menu = new MainMenu(user);
             menu.ShowDialog();
-            Close();
+            Application.Exit();
         }
 
         private void BtnSalir_Click(object sender, EventArgs e)
@@ -58,7 +55,7 @@ namespace StOrgPro
 
         private void BtnSalir_Click_1(object sender, EventArgs e)
         {
-            Close();
+            Application.Exit();
         }
         #endregion
     }

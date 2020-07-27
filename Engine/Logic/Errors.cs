@@ -19,4 +19,10 @@ namespace Engine
     public class DoesNotExist : Exception { }
 
     public class InventoryCreation : Exception { }
+
+    public class WrongDataType : Exception { }
+
+    public class NoPermit : Exception { }
+
+    public class InvalidInput : Exception { }
 }

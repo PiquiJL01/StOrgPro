@@ -14,9 +14,11 @@ namespace StOrgPro.CommonMenus
     public partial class Manage : Form
     {
         private DataType dataType;
+        private User user;
 
-        public Manage(DataType dataType)
+        public Manage(User user, DataType dataType)
         {
+            this.user = user;
             this.dataType = dataType;
             string type;
             switch (dataType)
@@ -44,7 +46,7 @@ namespace StOrgPro.CommonMenus
         private void BtnAdd_Click(object sender, EventArgs e)
         {
             Hide();
-            AddFormulary addformulary = new AddFormulary(dataType);
+            AddFormulary addformulary = new AddFormulary(user, dataType);
             addformulary.ShowDialog();
             Show();
         }
