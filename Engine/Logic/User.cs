@@ -30,7 +30,7 @@ namespace Engine
             int permitCatalogManagement, int permitInventoryManagement,
             int permitStoragesManagement)
         {
-            UserName = UserName;
+            UserName = userName;
             Password = password;
             if (permitUserManagement == 0)
             {
@@ -65,7 +65,7 @@ namespace Engine
             }
             else
             {
-                PermitStoragesManagement = false;
+                PermitStoragesManagement = true;
             }
         }
 

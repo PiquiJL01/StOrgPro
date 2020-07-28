@@ -54,7 +54,7 @@ namespace StOrgPro.CommonMenus
         private void BtnModify_Click(object sender, EventArgs e)
         {
             Hide();
-            ModifyDeleteFormulary modifyDeleteFormulary = new ModifyDeleteFormulary(Process.Modify, dataType);
+            ModifyDeleteFormulary modifyDeleteFormulary = new ModifyDeleteFormulary(user, Process.Modify, dataType);
             modifyDeleteFormulary.ShowDialog();
             Show();
         }
@@ -62,7 +62,7 @@ namespace StOrgPro.CommonMenus
         private void BtnDelete_Click(object sender, EventArgs e)
         {
             Hide();
-            ModifyDeleteFormulary modifyDeleteFormulary = new ModifyDeleteFormulary(Process.Delete, dataType);
+            ModifyDeleteFormulary modifyDeleteFormulary = new ModifyDeleteFormulary(user, Process.Delete, dataType);
             modifyDeleteFormulary.ShowDialog();
             Show();
         }

@@ -9,6 +9,7 @@ namespace Engine
     public class Constants
     {
         public const string Crear = "Crear";
+        public const string Ver = "Ver";
         public const string Modificar = "Modificar";
         public const string Eliminar = "Eliminar";
 
@@ -44,6 +45,7 @@ namespace Engine
         User,
         Storage,
         Item,
-        Inventory
+        Inventory,
+        Search
     }
 }

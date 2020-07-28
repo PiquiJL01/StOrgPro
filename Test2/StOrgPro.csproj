@@ -46,23 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommonMenus\AddFormulary.cs">
+    <Compile Include="GraficInterface\AddFormulary.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CommonMenus\AddFormulary.Designer.cs">
+    <Compile Include="GraficInterface\AddFormulary.Designer.cs">
       <DependentUpon>AddFormulary.cs</DependentUpon>
     </Compile>
-    <Compile Include="CommonMenus\Manage.cs">
+    <Compile Include="GraficInterface\Manage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CommonMenus\Manage.Designer.cs">
+    <Compile Include="GraficInterface\Manage.Designer.cs">
       <DependentUpon>Manage.cs</DependentUpon>
     </Compile>
-    <Compile Include="ErrorMsg\Message.cs" />
-    <Compile Include="CommonMenus\ModifyDeleteSearch.cs">
+    <Compile Include="GraficInterface\Message.cs" />
+    <Compile Include="GraficInterface\ModifyDeleteSearch.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CommonMenus\ModifyDeleteSearch.Designer.cs">
+    <Compile Include="GraficInterface\ModifyDeleteSearch.Designer.cs">
       <DependentUpon>ModifyDeleteSearch.cs</DependentUpon>
     </Compile>
     <Compile Include="GraficInterface\Login.cs">
@@ -79,13 +79,13 @@
     <Compile Include="GraficInterface\MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="CommonMenus\AddFormulary.resx">
+    <EmbeddedResource Include="GraficInterface\AddFormulary.resx">
       <DependentUpon>AddFormulary.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CommonMenus\Manage.resx">
+    <EmbeddedResource Include="GraficInterface\Manage.resx">
       <DependentUpon>Manage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CommonMenus\ModifyDeleteSearch.resx">
+    <EmbeddedResource Include="GraficInterface\ModifyDeleteSearch.resx">
       <DependentUpon>ModifyDeleteSearch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GraficInterface\Login.resx">

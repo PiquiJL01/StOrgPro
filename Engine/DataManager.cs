@@ -153,8 +153,10 @@ namespace Engine
             try
             {
                 string query = "UPDATE Users " +
-                    "SET Password = @password, PermisoUsuario = @permisoUsuario " +
-                    "Permisoitems = @permisoItems, PermisoInventario = @permisoInventario, " +
+                    "SET Password = @password, " +
+                    "PermisoUsuario = @permisoUsuario, " +
+                    "Permisoitems = @permisoItems, " +
+                    "PermisoInventario = @permisoInventario, " +
                     "PermisoAlmacen = @permisoAlmacen " +
                     "WHERE Nombre = @nombre";
                 connection.Open();
@@ -282,7 +284,7 @@ namespace Engine
             }
         }
 
-        public void DeleteInventory(Storage storage)
+        private void DeleteInventory(Storage storage)
         {
             try
             {
@@ -348,11 +350,12 @@ namespace Engine
             SqlDataReader dataReader = command.ExecuteReader();
             if (dataReader.Read())
             {
-                User user = new User(dataReader["Nombre"].ToString(), dataReader["Password"].ToString(),
-                    Convert.ToInt32(dataReader["PermisoUsuario"].ToString()),
-                    Convert.ToInt32(dataReader["Permisoitems"].ToString()),
-                    Convert.ToInt32(dataReader["PermisoInventario"].ToString()),
-                    Convert.ToInt32(dataReader["PermisoAlmacen"].ToString()));
+                User user = new User(dataReader["Nombre"].ToString(), 
+                    dataReader["Password"].ToString(),
+                    int.Parse(dataReader["PermisoUsuario"].ToString()),
+                    int.Parse(dataReader["Permisoitems"].ToString()),
+                    int.Parse(dataReader["PermisoInventario"].ToString()),
+                    int.Parse(dataReader["PermisoAlmacen"].ToString()));
                 connection.Close();
                 return user;
             }
@@ -432,6 +435,7 @@ namespace Engine
             adapter.SelectCommand = command;
             DataTable table = new DataTable();
             adapter.Fill(table);
+            connection.Close();
             return table;
         }
 
@@ -476,6 +480,10 @@ namespace Engine
 
         public DataTable GetSearchResults(Item item)
         {
+            if (item == null)
+            {
+                return null;
+            }
             List<string> storagesNames = GetStorageName();
             List<Storage> storages = new List<Storage>();
             IList<SearchResult> results = new List<SearchResult>();

@@ -46,8 +46,8 @@ namespace StOrgPro
             }
             else
             {
-               CommonMenus.ModifyDeleteFormulary modifyDelete = new CommonMenus.ModifyDeleteFormulary(user, DataType.User);
-                modifyDelete.ShowDialog();
+               CommonMenus.ModifyDeleteFormulary modifyDelete = new CommonMenus.ModifyDeleteFormulary(user,Process.Modify, DataType.User);
+               modifyDelete.ShowDialog();
             }
             Show();
         }
@@ -62,7 +62,7 @@ namespace StOrgPro
             }
             else
             {
-                CommonMenus.ModifyDeleteFormulary modifyDeleteFormulary = new CommonMenus.ModifyDeleteFormulary(Process.See, DataType.Storage);
+                CommonMenus.ModifyDeleteFormulary modifyDeleteFormulary = new CommonMenus.ModifyDeleteFormulary(user, Process.See, DataType.Storage);
                 modifyDeleteFormulary.ShowDialog();
             }
             Show();
@@ -70,13 +70,28 @@ namespace StOrgPro
 
         private void BtnItem_Click(object sender, EventArgs e)
         {
-            if (user.PermitCatalogManagement)
+            if (user.GetPermit(DataType.Item))
             {
                 Hide();
                 CommonMenus.Manage manage = new CommonMenus.Manage(user, DataType.Item);
                 manage.ShowDialog();
                 Show();
             }
+            else
+            {
+                Hide();
+                CommonMenus.ModifyDeleteFormulary formulary = new CommonMenus.ModifyDeleteFormulary(user, Process.See, DataType.Item);
+                formulary.ShowDialog();
+                Show();
+            }
+        }
+
+        private void BtnSearch_Click(object sender, EventArgs e)
+        {
+            Hide();
+            CommonMenus.ModifyDeleteFormulary formulary = new CommonMenus.ModifyDeleteFormulary(user, Process.Search, DataType.Search);
+            formulary.ShowDialog();
+            Show();
         }
 
         private void BtnExit_Click(object sender, EventArgs e)
